@@ -1,0 +1,65 @@
+<div class="mx-auto max-w-7xl lg:flex lg:gap-x-16 lg:px-8">
+  <%= render 'shared/owner_sidebar' %>
+  
+  <main class="px-8 my-8 lg:flex-auto">
+    <div>
+      <h2 class="text-2xl font-semibold leading-7 text-gray-900">Reservations & Payments</h2>
+    </div>
+
+    <div class="flex flex-col mt-4">
+    <% @reservations.each do |reservation| %>
+      <div class="mt-4 border border-gray-300 rounded-xl p-6 h-min">
+        <div class="flex justify-between">
+          <%= render 'properties/mini_property_item', property: reservation.property %>
+        </div>
+
+        <div class="relative py-6">
+          <div class="absolute inset-0 flex items-center" aria-hidden="true">
+            <div class="w-full border-t border-gray-300"></div>
+          </div>
+        </div>
+
+        <div>
+          <h3 class="text-xl font-medium text-gray-900">Trip details</h3>
+          <div class="flex justify-between font-light mt-6">
+            <p>Booked by</p>
+            <p class="font-medium"><%= reservation.user.profile.name %> (<%= reservation.user.email %>) </p>
+          </div>
+          <div class="flex justify-between font-light mt-6">
+            <p>Dates</p>
+            <p class="font-medium"><%= reservation.checkin_date %> - <%= reservation.checkout_date %> </p>
+          </div>
+        </div>
+
+        <div class="relative py-6">
+          <div class="absolute inset-0 flex items-center" aria-hidden="true">
+            <div class="w-full border-t border-gray-300"></div>
+          </div>
+        </div>
+
+        <div>
+          <h3 class="text-xl font-medium text-gray-900">Price details</h3>
+          <div class="flex justify-between font-light mt-6">
+            <p><%= humanized_money_with_symbol(reservation.payment.per_night) %> x <%= (reservation.checkout_date - reservation.checkin_date).to_i %> night</p>
+            <p><%= humanized_money_with_symbol(reservation.payment.base_fare) %></p>
+          </div>
+          <div class="flex justify-between font-light mt-4">
+            <p>Airbnb service fee</p>
+            <p><%= humanized_money_with_symbol(reservation.payment.service_fee) %></p>
+          </div>
+        </div>
+
+        <div class="relative py-6">
+          <div class="absolute inset-0 flex items-center" aria-hidden="true">
+            <div class="w-full border-t border-gray-300"></div>
+          </div>
+        </div>
+        <div class="flex justify-between font-medium">
+          <p>Total</p>
+          <p><%= humanized_money_with_symbol(reservation.payment.total_amount) %></p>
+        </div>
+      </div>
+    <% end %>
+    </div>
+  </main>
+</div>

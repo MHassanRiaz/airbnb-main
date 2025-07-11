@@ -1,0 +1,76 @@
+<div class="bg-white">
+  <main class="pt-4 pb-16">
+    <div class="mx-auto max-w-2xl px-4 pt-8 sm:px-6 lg:grid lg:max-w-7xl lg:grid-cols-4 lg:grid-rows-[auto,auto,1fr] lg:gap-x-24 lg:px-8">
+      <div class="lg:col-span-2">
+        <h2 class="text-3xl font-medium leading-6 text-gray-900">Confirm and pay</h2>
+
+        <div class="mt-12">
+          <h3 class="text-2xl font-medium text-gray-900">Your trip</h3>
+          <div class="flex justify-between mt-4">
+            <p class="font-medium">Dates</p>
+            <p class="font-medium"><%= @checkin_date.strftime('%e %b') %> - <%= @checkout_date.strftime('%e %b') %></p>
+          </div>
+        </div>
+
+        <div class="mt-12 border-t border-gray-300 pt-12">
+          <h3 class="text-2xl font-medium text-gray-900">Ground rules</h3>
+          <p class="mt-6 font-light">We ask every guest to remember a few simple things about what makes a great guest.</p>
+          <ul class="font-light list-disc ms-4 mt-4">
+            <li>
+              Follow the house rules
+            </li>
+            <li>
+              Treat your Host's home like your own
+            </li>
+          </ul>
+        </div>
+
+        <div class="mt-8 border-t border-gray-300 pt-12" data-turbo="false">
+          <%= form_with url: booking_payments_path(
+            property_id: @property.id,
+            user_id: current_user.id,
+            checkin_date: @checkin_date,
+            checkout_date: @checkout_date,
+            base_fare: @base_fare,
+            service_fee: @service_fee,
+            total_amount: @total_amount
+          ), method: :post do |form| %>
+            <%= form.submit "Confirm and pay", class:"rounded-md bg-primary px-3.5 py-2.5 text-sm font-semibold text-white text-lg shadow-sm hover:bg-primary-dark focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary" %>
+          <% end %>
+        </div>
+      </div>
+
+      <div class="mt-4 lg:mt-0 border border-gray-300 lg:col-span-2 rounded-xl p-6 h-min">
+        <h2 class="sr-only">Booking information</h2>
+        <%= render 'properties/mini_property_item', property: @property %>
+
+        <div class="relative py-6">
+          <div class="absolute inset-0 flex items-center" aria-hidden="true">
+            <div class="w-full border-t border-gray-300"></div>
+          </div>
+        </div>
+
+        <div>
+          <%# TODO: Convert this into a partial. %>
+          <h3 class="text-xl font-medium text-gray-900">Price details</h3>
+          <div class="flex justify-between font-light mt-6">
+            <p><%= humanized_money_with_symbol(@per_night) %> x <%= @total_nights %> night</p>
+            <p><%= humanized_money_with_symbol(@base_fare) %></p>
+          </div>
+          <div class="flex justify-between font-light mt-4">
+            <p>Airbnb service fee</p>
+            <p><%= humanized_money_with_symbol(@service_fee) %></p>
+          </div>
+        </div>
+        <div class="relative py-6">
+          <div class="absolute inset-0 flex items-center" aria-hidden="true">
+            <div class="w-full border-t border-gray-300"></div>
+          </div>
+        </div>
+        <div class="flex justify-between font-medium">
+          <p>Total</p>
+          <p><%= humanized_money_with_symbol(@total_amount) %></p>
+        </div>
+      </div>
+  </main>
+</div>

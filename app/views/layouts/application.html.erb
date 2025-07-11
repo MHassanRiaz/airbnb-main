@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Airbnb | Holiday rentals, cabins, beach houses and more</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+
+    <%= favicon_link_tag 'favicon.ico' %>
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+    <%= stylesheet_link_tag "tailwind", "inter-font", "data-turbo-track": "reload" %>
+
+    <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+    <%= javascript_importmap_tags %>
+
+    <% if controller_name == 'booking_payments' && action_name == 'create'%>
+      <%= stripe_javascript_tag %>
+    <% end %>
+
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
+
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"
+    />
+
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+
+    <%# Date picker: https://flatpickr.js.org/getting-started/ %>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+  </head>
+
+  <body>
+    <%= render 'shared/notice' %>
+    <%= render 'shared/alert' %>
+
+    <% if controller_name != 'registrations' && controller_name != 'sessions' %>
+      <%= render 'layouts/header' %>
+    <% end %>
+    <%= yield %>
+    
+
+<% if flash[:notice] %>
+  <div class="alert alert-success"><%= flash[:notice] %></div>
+<% end %>
+  </body>
+</html>

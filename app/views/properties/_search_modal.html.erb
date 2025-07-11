@@ -1,0 +1,44 @@
+<div>
+  <button data-action="click->modal#toggleModal" type="button" class="relative rounded-md bg-white text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+    <span class="absolute -inset-2.5"></span>
+    <span class="sr-only">Close panel</span>
+    <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+    </svg>
+  </button>
+  <div class="flex flex-col mx-6 my-6"
+    data-controller="search-modal"
+    >
+    <h2 class="text-2xl font-medium leading-6 text-gray-900" id="modal-title">Share this place</h2>
+
+    <%= form_with url: search_path, local: true, method: :get, class:'mt-6 grid grid-cols-1 gap-y-4' do |f| %>
+      <div class="grid grid-cols-2 items-center">
+        <%= f.label 'Select Country', class:'text-base leading-6 text-gray-900' %>
+        <%= f.country_select :country_code, { include_blank: 'Select a country' }, class: 'rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-gray-900 sm:text-sm sm:leading-6' %>
+      </div>
+      
+      <div class="grid grid-cols-2 items-center">
+        <%= f.label :checkin_date, class:'text-base leading-6 text-gray-900' %>
+        <%= f.text_field :checkin_date,
+          class:"rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-gray-900 sm:text-sm sm:leading-6",
+          placeholder:"#{Date.today.strftime('%Y-%m-%d')}",
+          data: {'search-modal-target': "checkin"}
+          %>
+      </div>
+
+      <div class="grid grid-cols-2 items-center">
+        <%= f.label :checkout_date, class:'text-base leading-6 text-gray-900' %>
+        <%= f.text_field :checkout_date,
+          class:"rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-gray-900 sm:text-sm sm:leading-6",
+          placeholder:"#{(Date.today + 1.day).strftime('%Y-%m-%d')}",
+          data: {'search-modal-target': "checkout"}
+          %>
+      </div>
+
+      <%# TODO: Close the modal after clicking on Search button %>
+      <div class="col-span-full">
+        <%= f.submit "Search", class:"cursor-pointer mt-2 flex items-center justify-center rounded-md border border-transparent bg-primary px-8 py-3 text-base font-medium text-white hover:bg-primary-dark focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2" %>
+      </div>
+    <% end %>
+  </div>
+</div>

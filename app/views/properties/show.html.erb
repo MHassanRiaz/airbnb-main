@@ -1,0 +1,202 @@
+<div class="bg-white">
+  <main class="pt-4 pb-16">
+    <!-- Headline + Share + Wishlist -->
+    <div class="flex justify-between mx-auto max-w-2xl px-4 sm:px-6 lg:max-w-7xl lg:px-8 py-2">
+      <h1 class="inline text-2xl font-medium leading-7 text-gray-900 sm:truncate"><%= @property.headline %></h1>
+      <div class="space-x-1">
+        <span 
+          data-controller="share"
+          data-action="click->share#toggleShareModal"
+          class="px-3 pt-2 pb-3 hover:rounded-md hover:bg-gray-100 cursor-pointer"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" aria-hidden="true" role="presentation" focusable="false" style="display: inline; fill: none; height: 16px; width: 16px; stroke: currentcolor; stroke-width: 2; overflow: visible;"><g fill="none"><path d="M27 18v9a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2v-9M16 3v23V3zM6 13l9.3-9.3a1 1 0 0 1 1.4 0L26 13"></path></g></svg>
+          <span class="underline text-sm ms-1">Share</span>
+        </span>
+
+        <span 
+          class="px-3 pt-2 pb-3 hover:rounded-md hover:bg-gray-100 cursor-pointer"
+          data-controller="wishlist"
+          data-user-logged-in="<%= user_signed_in? %>"
+          data-property-id="<%= @property.id %>"
+          data-user-id="<%= current_user&.id %>"
+          data-wishlist-id="<%= @property.wishlists.find_by(user: current_user)&.id %>"
+          data-action="click->wishlist#updateWishlistStatus"
+          data-status="<%= @property.wishlisted_by?(current_user) %>"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" 
+            viewBox="0 0 32 32" 
+            aria-hidden="true" 
+            role="presentation" 
+            focusable="false"
+            class="inline h-4 w-4 stroke-black stroke-2 <%= @property.wishlisted_by?(current_user) ? 'fill-primary' : 'fill-none' %>"
+            style="overflow: visible;"
+            data-wishlist-target="icon"
+            >
+              <path d="M16 28c7-4.73 14-10 14-17a6.98 6.98 0 0 0-7-7c-1.8 0-3.58.68-4.95 2.05L16 8.1l-2.05-2.05a6.98 6.98 0 0 0-9.9 0A6.98 6.98 0 0 0 2 11c0 7 7 12.27 14 17z"></path>
+          </svg>
+          <span 
+            class="underline text-sm ms-1"
+            data-wishlist-target="text"
+          >
+            <%= @property.wishlisted_by?(current_user) ? 'Saved' : 'Save' %>
+          </span>
+        </span>
+      </div>
+    </div>
+    <!-- Image gallery -->
+
+    <% if @property.images.present? %>
+      <div class="mx-auto mt-6 max-w-2xl sm:px-6 lg:grid lg:max-w-7xl lg:grid-cols-4 lg:gap-x-2 lg:px-8">
+        <% if @property.images.count < 5 %>
+          <div class="aspect-h-2 aspect-w-6 overflow-hidden lg:rounded-lg lg:block col-span-4">
+            <%= image_tag @property.images[0], class:"h-full w-full object-cover object-center" %>
+          </div>
+        <% else %>
+          <div class="aspect-h-2 aspect-w-3 overflow-hidden lg:rounded-l-lg lg:block col-span-2">
+            <%= image_tag @property.images[0], class:"h-full w-full object-cover object-center" %>
+          </div>
+          <div class="hidden lg:grid lg:grid-cols-1 lg:gap-y-2">
+            <div class="aspect-h-2 aspect-w-3 overflow-hidden">
+              <%= image_tag @property.images[1], class:"h-full w-full object-cover object-center" %>
+            </div>
+            <div class="aspect-h-2 aspect-w-3 overflow-hidden">
+              <%= image_tag @property.images[2], class:"h-full w-full object-cover object-center" %>
+            </div>
+          </div>
+          <div class="hidden lg:grid lg:grid-cols-1 lg:gap-y-2">
+            <div class="aspect-h-2 aspect-w-3 overflow-hidden rounded-tr-lg">
+              <%= image_tag @property.images[3], class:"h-full w-full object-cover object-center" %>
+            </div>
+            <div class="aspect-h-2 aspect-w-3 overflow-hidden rounded-br-lg">
+              <%= image_tag @property.images[4], class:"h-full w-full object-cover object-center" %>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    <% end %>
+
+    <!-- Property info -->
+    <div class="mx-auto max-w-2xl px-4 pt-8 sm:px-6 lg:grid lg:max-w-7xl lg:grid-cols-3 lg:grid-rows-[auto,auto,1fr] lg:gap-x-8 lg:px-8">
+      <!-- Name + Description -->
+      <div class="lg:col-span-2 lg:pr-8">
+        <h2 class="text-xl font-medium leading-6 text-gray-900 sm:truncate"><%= @property.name %>, <%= country_name(@property.country_code) %></h2>
+        <div class="mt-1 font-light">
+          <%# TODO: Add checks: check if any value is 0 or 1 or more than 1 %>
+          <%= @property.guest_count %> guests · <%= @property.bedroom_count %> bedrooms · <%= @property.bed_count %> beds · <%= @property.bathroom_count %> bathrooms
+        </div>
+        <div class="mt-1 flex text-base items-center">
+          <svg 
+            xmlns="http://www.w3.org/2000/svg" 
+            viewBox="0 0 32 32" 
+            aria-hidden="true" 
+            role="presentation" 
+            focusable="false"
+            class="me-1"
+            style="display: inline; height: 16px; width: 16px; fill: currentcolor;"
+          >
+            <path fill-rule="evenodd" d="m15.1 1.58-4.13 8.88-9.86 1.27a1 1 0 0 0-.54 1.74l7.3 6.57-1.97 9.85a1 1 0 0 0 1.48 1.06l8.62-5 8.63 5a1 1 0 0 0 1.48-1.06l-1.97-9.85 7.3-6.57a1 1 0 0 0-.55-1.73l-9.86-1.28-4.12-8.88a1 1 0 0 0-1.82 0z"></path>
+          </svg>
+          <% if @property.reviews_count != 0 %>
+            <span class="font-medium"><%= (@property.average_final_rating).round(2) %> · <span class="underline"><%= @property.reviews_count %> reviews</span> </span>
+          <% else %>
+            <span class="font-light">No reviews yet</span>
+          <% end %>
+        </div>
+
+        <!-- Description and details -->
+        <div class="border-t border-gray-200 pt-10 mt-4 mb-8">
+          <h3 class="sr-only">Description</h3>
+
+          <div class="space-y-6">
+            <p class="text-base text-gray-900"><%= @property.description.to_plain_text.truncate(400) %></p>
+            <% if @property.description.to_plain_text.length > 400 %>
+              <div 
+                class="flex items-center gap-1"
+                data-controller="description"
+                data-action="click->description#toggleDescriptionModal"
+              >
+                <span class="font-medium underline">Show more</span>
+                <svg viewBox="0 0 18 18" role="presentation" aria-hidden="true" focusable="false" style="height: 12px; width: 12px; display: block; fill: var(--f-k-smk-x);"><path d="m4.29 1.71a1 1 0 1 1 1.42-1.41l8 8a1 1 0 0 1 0 1.41l-8 8a1 1 0 1 1 -1.42-1.41l7.29-7.29z" fill-rule="evenodd"></path></svg>
+              </div>
+
+              <%= render 'shared/modal', modalTriggerId: "description", content: 'properties/description_modal', content_params: {description: @property.description} %>
+            <% end %>
+          </div>
+        </div>
+
+        <!-- Amenities -->
+        <%= render :partial => 'properties/amenities', :locals => {:amenities => @property.amenities} %>
+      </div>
+
+      <!-- Booking Component -->
+      <div 
+        class="mt-4 lg:mt-0 border rounded-xl p-6 shadow-xl h-min"
+        data-controller="booking"
+        data-per-night-price="<%= humanized_money(@property.price) %>"
+        data-blocked-dates="<%= @blocked_dates %>"
+        >
+        <h2 class="sr-only">Booking information</h2>
+        <p class="text-lg font-light tracking-tight text-gray-900"><span class="text-2xl font-semibold"><%= humanized_money_with_symbol(@property.price) %></span> night</p>
+        <div class="flex mt-6">
+          <div class="rounded-l-lg px-3 pb-1.5 pt-2.5 shadow-sm ring-1 ring-inset ring-gray-400 focus-within:ring-2 focus-within:ring-indigo-600">
+            <label for="checkin" class="block text-xs font-medium text-gray-900">CHECK-IN</label>
+            <input 
+              type="text" 
+              name="checkin" 
+              id="checkin" 
+              class="block w-full border-0 p-0 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
+              value="<%= Date.tomorrow.strftime('%Y-%m-%d') %>"
+              data-booking-target="checkin"
+              >
+          </div>
+
+          <div class="rounded-r-lg px-3 pb-1.5 pt-2.5 shadow-sm ring-1 ring-inset ring-gray-400 focus-within:ring-2 focus-within:ring-indigo-600">
+            <label for="checkout" class="block text-xs font-medium text-gray-900">CHECK-OUT</label>
+            <input 
+              type="text" 
+              name="checkout" 
+              id="checkout" 
+              class="block w-full border-0 p-0 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
+              value="<%= (Date.tomorrow + 1.day).strftime('%Y-%m-%d') %>"
+              data-booking-target="checkout"
+              >
+          </div>
+
+        </div>
+        <button
+          data-reserve-property-url="<%= new_property_booking_path(@property) %>"
+          type="submit" 
+          data-action="click->booking#reserveProperty"
+          class="mt-4 flex w-full items-center justify-center rounded-md border border-transparent bg-primary px-8 py-3 text-base font-medium text-white hover:bg-primary-dark focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
+        >
+          Reserve
+        </button>
+        <p class="font-light text-center text-sm py-4">You won't be charged yet</p>
+        <div class="mt-4">
+          <div class="flex justify-between font-light">
+            <p><%= humanized_money_with_symbol(@property.price) %> x <span data-booking-target="numberOfNights">1</span> night</p>
+            <p><%= currency_symbol %><span data-booking-target="baseFare">0</span></p>
+          </div>
+          <div class="flex justify-between font-light mt-4">
+            <p>Airbnb service fee</p>
+            <p><%= currency_symbol %><span data-booking-target="serviceFee">0</span></p>
+          </div>
+        </div>
+        <div class="relative py-6">
+          <div class="absolute inset-0 flex items-center" aria-hidden="true">
+            <div class="w-full border-t border-gray-300"></div>
+          </div>
+        </div>
+        <div class="flex justify-between font-medium">
+          <p>Total</p>
+          <p><%= currency_symbol %><span data-booking-target="totalAmount">0</span></p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Reviews -->
+    <%= render :partial => 'properties/reviews', :locals => {:property => @property} %>
+  </main>
+</div>
+
+<%= render 'shared/modal', modalTriggerId: "share", content: 'properties/share_modal', content_params: { property: @property } %>

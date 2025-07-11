@@ -1,0 +1,37 @@
+<div class="flex flex-col py-4">
+  <div class="flex items-center">
+    <% if review.user.profile.picture.present? %>
+      <%= image_tag review.user.profile.picture, alt: review.user.profile.name, class:"h-12 w-12 rounded-full" %>
+    <% else %>
+      <svg 
+        xmlns="http://www.w3.org/2000/svg" 
+        fill="none" 
+        viewBox="0 0 24 24" 
+        stroke-width="1.5" 
+        stroke="currentColor" 
+        class="h-12 w-12 rounded-full"
+      >
+        <path stroke-linecap="round" stroke-linejoin="round" d="M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 0a9 9 0 1 0-11.963 0m11.963 0A8.966 8.966 0 0 1 12 21a8.966 8.966 0 0 1-5.982-2.275M15 9.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+      </svg>
+    <% end %>
+      
+    <div>
+      <p class="text-base text-gray-900 ms-4"><%= review.user.profile.name %></p>
+      <p class="text-xs text-gray-900 ms-4"><%= review.user.profile.city %>, <%= country_name(review.user.profile.country_code) %></p>
+    </div>
+  </div>
+  <div class="mt-2 flex items-center">
+    <% 5.times do |i| %>
+      <svg class="<%= review.final_rating.round(0) > (i) ? 'text-black' : 'text-gray-300'%> h-3 w-3 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+        <path fill-rule="evenodd" d="M10.868 2.884c-.321-.772-1.415-.772-1.736 0l-1.83 4.401-4.753.381c-.833.067-1.171 1.107-.536 1.651l3.62 3.102-1.106 4.637c-.194.813.691 1.456 1.405 1.02L10 15.591l4.069 2.485c.713.436 1.598-.207 1.404-1.02l-1.106-4.637 3.62-3.102c.635-.544.297-1.584-.536-1.65l-4.752-.382-1.831-4.401z" clip-rule="evenodd" />
+      </svg>
+    <% end %>
+  </div>
+  <div class="mt-6 sm:mt-0">
+    <p class="sr-only">5 out of 5 stars</p>
+
+    <div class="mt-3 space-y-6 text-base text-gray-600">
+      <p><%= review.content %></p>
+    </div>
+  </div>
+</div>
