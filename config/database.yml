@@ -16,4 +16,4 @@ test:
 
 production:
   <<: *default
-  database: airbnb_main_production
+  database: myapp_development

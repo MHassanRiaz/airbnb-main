@@ -24,5 +24,4 @@ COPY . .
 EXPOSE 3000
 
 # Start server (override in docker-compose if needed)
-CMD ["bash"]
-
+CMD ["rails", "server", "-b", "0.0.0.0"]
