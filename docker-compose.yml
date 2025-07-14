@@ -17,6 +17,11 @@ services:
   web:
     build: .
     command: bash -c "rm -f tmp/pids/server.pid && bundle exec rails s -b 0.0.0.0"
+    environment:
+
+      RAILS_ENV: production
+      RAILWAY_HOST: rare-cat-production.up.railway.app
+      
     volumes:
       - .:/app
     ports:
