@@ -20,8 +20,10 @@ RUN bundle install
 # Copy the rest of the app
 COPY . .
 
+ENV RAILS_ENV=production
+
 # Expose Rails port
 EXPOSE 3000
 
 # Start server (override in docker-compose if needed)
-CMD ["rails", "server", "-b", "0.0.0.0"]
+CMD ["bash", "-c", "rm -f tmp/pids/server.pid && bundle exec rails s -b 0.0.0.0 -p $PORT"]

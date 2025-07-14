@@ -1,7 +1,7 @@
 require "active_support/core_ext/integer/time"
 
 Rails.application.configure do
-  config.hosts << "rare-cat-production.up.railway.app"
+config.hosts << ENV["RAILWAY_HOST"] if ENV["RAILWAY_HOST"].present?
 
   # Settings specified here will take precedence over those in config/application.rb.
 
