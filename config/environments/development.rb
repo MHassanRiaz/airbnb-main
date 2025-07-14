@@ -33,9 +33,6 @@ Rails.application.configure do
     config.cache_store = :null_store
   end
   
-Rails.configuration.stripe = {
-  secret_key: ENV['STRIPE_SECRET_KEY'] || 'sk_test_...your_key_here'
-}
 
   # Store uploaded files on the local file system (see config/storage.yml for options).
   config.active_storage.service = :local
